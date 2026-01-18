@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="经典贪吃蛇游戏 - 精美的霓虹风格网页游戏">
+    <title>霓虹贪吃蛇 | Neon Snake</title>
+    
+    <!-- Google Fonts - Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 样式文件 -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 动态背景球体 -->
+    <div class="bg-orb bg-orb-cyan"></div>
+    <div class="bg-orb bg-orb-fuchsia"></div>
+
+    <!-- 主容器 -->
+    <div class="container">
+        
+        <!-- ========== 登录页面 ========== -->
+        <div id="login-page" class="page glass-panel active">
+            <h1 class="gradient-title">霓虹贪吃蛇</h1>
+            <p class="subtitle">经典游戏，全新体验</p>
+            
+            <form id="login-form" class="auth-form">
+                <div class="input-group">
+                    <label for="login-username">用户名</label>
+                    <input type="text" id="login-username" placeholder="请输入用户名" required>
+                </div>
+                <div class="input-group">
+                    <label for="login-password">密码</label>
+                    <input type="password" id="login-password" placeholder="请输入密码" required>
+                </div>
+                <div id="login-error" class="error-message"></div>
+                <button type="submit" class="btn btn-primary btn-glow">登 录</button>
+            </form>
+            
+            <div class="auth-links">
+                <button id="btn-guest" class="btn btn-secondary">游客模式</button>
+                <p class="link-text">还没有账号？<a href="#" id="goto-register">立即注册</a></p>
+            </div>
+        </div>
+
+        <!-- ========== 注册页面 ========== -->
+        <div id="register-page" class="page glass-panel">
+            <h1 class="gradient-title">创建账号</h1>
+            <p class="subtitle">加入我们，开始游戏</p>
+            
+            <form id="register-form" class="auth-form">
+                <div class="input-group">
+                    <label for="reg-username">用户名</label>
+                    <input type="text" id="reg-username" placeholder="3-12个字符" required minlength="3" maxlength="12">
+                </div>
+                <div class="input-group">
+                    <label for="reg-password">密码</label>
+                    <input type="password" id="reg-password" placeholder="至少6个字符" required minlength="6">
+                </div>
+                <div class="input-group">
+                    <label for="reg-confirm">确认密码</label>
+                    <input type="password" id="reg-confirm" placeholder="再次输入密码" required>
+                </div>
+                <div id="register-error" class="error-message"></div>
+                <button type="submit" class="btn btn-primary btn-glow">注 册</button>
+            </form>
+            
+            <div class="auth-links">
+                <p class="link-text">已有账号？<a href="#" id="goto-login">返回登录</a></p>
+            </div>
+        </div>
+
+        <!-- ========== 游戏页面 ========== -->
+        <div id="game-page" class="page">
+            <!-- 顶部信息栏 -->
+            <div class="game-header glass-panel">
+                <div class="user-info">
+                    <span class="user-icon">👤</span>
+                    <span id="display-username">用户名</span>
+                    <span id="guest-badge" class="badge badge-guest" style="display: none;">游客</span>
+                </div>
+                <button id="btn-logout" class="btn btn-sm btn-secondary">退出</button>
+            </div>
+
+            <!-- 游戏标题 -->
+            <h1 class="gradient-title game-title">霓虹贪吃蛇</h1>
+
+            <!-- 分数面板 -->
+            <div class="score-panel glass-panel">
+                <div class="score-item">
+                    <span class="score-label">当前分数</span>
+                    <span id="current-score" class="score-value">0</span>
+                </div>
+                <div class="score-divider"></div>
+                <div class="score-item">
+                    <span class="score-label">最高分数</span>
+                    <span id="high-score" class="score-value">0</span>
+                </div>
+            </div>
+
+            <!-- 游戏画布容器 -->
+            <div class="canvas-container glass-panel">
+                <canvas id="game-canvas" width="400" height="400"></canvas>
+                <!-- 游戏覆盖层 -->
+                <div id="game-overlay" class="game-overlay">
+                    <div class="overlay-content">
+                        <h2 id="overlay-title">准备开始</h2>
+                        <p id="overlay-message">按下空格键或点击开始按钮</p>
+                        <button id="btn-start" class="btn btn-primary btn-glow">开始游戏</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 控制按钮 -->
+            <div class="game-controls">
+                <button id="btn-pause" class="btn btn-secondary" disabled>暂停</button>
+                <button id="btn-restart" class="btn btn-secondary" disabled>重新开始</button>
+            </div>
+
+            <!-- 操作提示 -->
+            <div class="game-tips glass-panel">
+                <p>🎮 使用 <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> 或 <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> 控制方向</p>
+                <p>⏸️ 按 <kbd>空格</kbd> 暂停/继续游戏</p>
+            </div>
+
+            <!-- 用户统计信息 -->
+            <div id="user-stats" class="stats-panel glass-panel">
+                <h3>游戏统计</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">登录时间</span>
+                        <span id="login-time" class="stat-value">--</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">游戏次数</span>
+                        <span id="game-count" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">总得分</span>
+                        <span id="total-score" class="stat-value">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript 文件 -->
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
